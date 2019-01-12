@@ -81,7 +81,7 @@ profilesHeader = {
     "UserID": "INTEGER PRIMARY KEY",
     "Username": "TEXT UNIQUE",
     "Password": "TEXT",
-    "ActiveSession": "TEXT"
+    "ActiveSession": "INTEGER"
 }
 createTable("profiles", profilesHeader)
 
