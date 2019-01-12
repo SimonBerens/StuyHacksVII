@@ -1,6 +1,9 @@
 from os import urandom
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 from flask_socketio import SocketIO
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
+import requests
 
 
 app = Flask(__name__)
@@ -17,6 +20,15 @@ def handle_my_custom_event(json, methods=["GET", "POST"]):
     print("received my event: " + str(json))
     socketio.emit("my response", json, callback=message_received)
 
+def get_cyberbullied():
+    url = "https://api.tisane.ai/parse"
+    post_fields = {"language":"en", "content":"Babylonians should not be allowed at managerial positions."}
+    headers = {'content-type': 'application/json','Ocp-Apim-Subscription-Key': '7eb4070eb5a7451d8d99d6767263a0d0'}
+    r = requests.post(url, data=json.dumps(post_fields), headers=headers)
+    json = urlopen(r).read().decode('utf-8')
+    print(json)
+
+get_cyberbullied()
 
 @app.route("/")
 def index():
@@ -27,9 +39,27 @@ def index():
 def chat():
     return render_template("chat.html")
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+     if request.method == "GET":
+        username = authenticate.is_loggedin(session)
+        if username:
+            flash("You are already logged in!", "warning")
+            return redirect(url_for('chat'))
+        else:
+            return render_template("login.html")
+
+        success, message = authenticate.login_user(
+                request.form['username'],
+                request.form['password'])
+        if success:
+            flash(message, "success")
+            session['loggedin']=request.form['username']
+            return redirect(url_for('chat', username=request.form['username']))
+        else:
+            flash(message, "danger")
+            return redirect(url_for('login'))
+
 
 @app.route("/register",methods=["GET", "POST"])
 def register():
