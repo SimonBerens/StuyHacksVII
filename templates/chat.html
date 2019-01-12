@@ -1,8 +1,11 @@
 {% extends "skeleton.html" %}
+{% block title %} Chatting {% endblock %}
 {% block body %}
-    <label for="message_box"> Thing </label>
-    <textarea id="message_box"></textarea>
-    <button type="button" class="btn btn-primary" id="send">Primary</button>
+    <div class="container">
+        <label for="message_box"> Thing </label>
+        <textarea id="message_box"></textarea>
+        <button type="button" class="btn btn-primary" id="send">Primary</button>
+    </div>
 {% endblock %}
 {% block js %}
     <script src="{{ url_for("static", filename="lib/socket.io.js") }}"></script>

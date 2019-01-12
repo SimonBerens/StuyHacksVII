@@ -19,12 +19,12 @@ def handle_my_custom_event(json, methods=["GET", "POST"]):
 
 @app.route("/")
 def index():
-    return render_template("index.html", title="Welcome")
+    return render_template("index.html")
 
 
 @app.route("/chat")
 def chat():
-    return render_template("chat.html", title="Chatting")
+    return render_template("chat.html")
 
 
 if __name__ == "__main__":
