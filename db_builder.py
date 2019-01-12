@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # creates tables for database stored in DB_FILE: alright.db
 # field names created; no records
 import sqlite3  # enable control of an sqlite database
@@ -47,7 +46,6 @@ messagesHeader = {
 createTable("messages", messagesHeader, ("FromUserID", "profiles", "UserID"))
 
 closeDB()
-=======
 # creates tables for database stored in DB_FILE: alright.db
 # field names created; no records
 import sqlite3  # enable control of an sqlite database
@@ -97,4 +95,3 @@ messagesHeader = {
 createTable("messages", messagesHeader, ("FromUserID", "profiles", "UserID"))
 
 closeDB()
->>>>>>> b2e90fd951054a5c2676baa2c12280dfb7bd0cc9
