@@ -1,20 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %} {% endblock %}</title>
-    {# Libraries #}
-    <link rel="stylesheet" href="{{ url_for("static", filename="lib/bootstrap.min.css") }}">
-    <script src="{{ url_for("static", filename="lib/jquery-3.3.1.min.js") }}"></script>
-    <script src="{{ url_for("static", filename="lib/popper.min.js") }}"></script>
-    <script src="{{ url_for("static", filename="lib/bootstrap.min.js") }}"></script>
-    {% block css %}
-    {% endblock %}
+  <meta charset="UTF-8">
+  <title>{% block title %} {% endblock %}</title>
+  {# Libraries #}
+  <link rel="stylesheet" href="{{ url_for("static", filename="lib/bootstrap.min.css") }}">
+  <script src="{{ url_for("static", filename="lib/jquery-3.3.1.min.js") }}"></script>
+  <script src="{{ url_for("static", filename="lib/popper.min.js") }}"></script>
+  <script src="{{ url_for("static", filename="lib/bootstrap.min.js") }}"></script>
+  {% block css %}
+  {% endblock %}
 </head>
 <body>
-{% block body %}
-{% endblock %}
-{% block js %}
-{% endblock %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for message in messages %}
+  <div class="visible" style="right: 2%; width: 40%; position: fixed; margin-top: 1%; z-index: 1030; opacity:0.95;">
+    <div class="alert alert-{{message[0]}} alert-dismissible fade show" role="alert">{{ message[1] }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+  {% block body %}
+  {% endblock %}
+  {% block js %}
+  {% endblock %}
 </body>
 </html>

@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-	<head>
-		<meta charset="utf-8">
-		<title>Lets go</title>
-	</head>
-	<body>
-		<p>Hello</p>
-		<a href="{{ url_for('login') }}">Login</a>
-		<a href="{{ url_for('register') }}">Register</a>
-	</body>
+<head>
+	<meta charset="utf-8">
+	<title>Lets go</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	<link rel="stylesheet" href="{{ url_for("static", filename="custom/index.css") }}">
+</head>
+<body>
+	<div class="card mx-auto" style="width: 18rem;">
+		<img class="card-img-top" src="http://www.stickpng.com/assets/thumbs/588a6ab8d06f6719692a2d26.png" alt="Card image cap">
+		<div class="card-body">
+			<h5 class="card-title">Welcome to EndCyberBully!</h5>
+			<p class="card-text">We use a a chat that utiizes AI to flag harmful messages and alert site owners.</p>
+			Have an account?  <a href="{{ url_for('login') }}">Login</a>
+			<br>
+			New to this site?  <a href="{{ url_for('register') }}">Register</a>
+		</div>
+	</div>
+
+</body>
 </html>

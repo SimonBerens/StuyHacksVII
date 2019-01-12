@@ -98,7 +98,7 @@ def login():
         username = authenticate.is_loggedin(session)
         if username:
             flash("You are already logged in!", "warning")
-            return redirect(url_for('chat'))
+            return redirect(url_for('login'))
         else:
             return render_template("login.html")
 
@@ -138,8 +138,10 @@ def logout():
     '''Handles logging out of user account'''
 
     if authenticate.is_loggedin(session):
+        print(session)
         session.pop('loggedin', None)
         session.pop('uid', None)
+        print(session)
         flash("Successfully logged out.", "success")
     else:
         flash("You are not logged in!", "danger")
