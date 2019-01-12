@@ -48,13 +48,13 @@ def login_user(username, password):
 
     with sqlite3.connect("cyber.db") as db:
         c = db.cursor()
-        command = "SELECT username, password FROM profiles;"
+        command = "SELECT username, password, userid FROM profiles;"
         c.execute(command)
         for user in c:
             if user and username == user[0]:
                 if check_password_hash(user[1], password):
-                    return (True, "Successfully logged in!")
-    return (False, "Incorrect username or password.")
+                    return (True, "Successfully logged in!", user[2])
+    return (False, "Incorrect username or password.", 0)
 
 def is_loggedin(session):
     '''
