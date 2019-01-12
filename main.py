@@ -16,9 +16,11 @@ DB_FILE = "cyber.db"
 
 @socketio.on("user connected")
 def handle_user_connected(json, methods=["GET", "POST"]):
-    command = f"UPDATE profiles SET ActiveSession = {request.sid} WHERE UserID == {session['uid']}"
+    print("connected")
+    command = f"UPDATE profiles SET ActiveSession = '{request.sid}' WHERE UserID == {session['uid']}"
     db = sqlite3.connect(DB_FILE, check_same_thread=False)  # open if file exists, otherwise create
     c = db.cursor()
+    print(command)
     c.execute(command)
     db.commit()
     db.close()
@@ -26,12 +28,13 @@ def handle_user_connected(json, methods=["GET", "POST"]):
 
 @socketio.on("disconnect")
 def handle_disconnect(json, methods=["GET", "POST"]):
-    command = f"UPDATE profiles SET ActiveSession = 0 WHERE UserID == {session['uid']}"
+    command = f"UPDATE profiles SET ActiveSession = '0' WHERE UserID == {session['uid']}"
     db = sqlite3.connect(DB_FILE, check_same_thread=False)  # open if file exists, otherwise create
     c = db.cursor()
     c.execute(command)
     db.commit()
     db.close()
+    print("disconnected")
 
 
 @socketio.on("user sent message")
@@ -54,11 +57,15 @@ def handle_user_sent_message(json, methods=["GET", "POST"]):
     result_set = c.execute('SELECT uid, username, activesession FROM profiles WHERE userid IN (%s)' %
                            ','.join('?'*len(uids)), uids)
     db.commit()
+    client_users = []
+    for u in result_set:
+        client_users.append({"uid": u[0], "username": u[1]})
     for user in result_set:
         if user[2] != 0:
-            socketio.emit("update table", {"users": result_set}, room=user[2])
+            socketio.emit("update table", {"users": client_users}, room=user[2])
 
     db.close()
+    print(client_users)
 
 
 def get_cyberbullied(content):
@@ -79,9 +86,8 @@ def get_cyberbullied(content):
         response = conn.getresponse()
         data = response.read()
         dict = json.loads(data.decode('utf-8'))
-        print(dict)
-        return dict
         conn.close()
+        return dict
     except Exception as e:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
@@ -91,9 +97,7 @@ def get_cyberbullied(content):
 
 def toFlag(content):
     data = get_cyberbullied(content)
-    if (data['sentiment_expressions'][0]['polarity'] == 'negative' and (
-            data['abuse'][0]['severity'] == "medium" or data['abuse'][0]['severity'] == "high" or data['abuse'][0][
-        'severity'] == "extreme")):
+    if (data['sentiment_expressions'][0]['polarity'] == 'negative' and (data['abuse'][0]['severity'] == "medium" or data['abuse'][0]['severity'] == "high" or data['abuse'][0]['severity'] == "extreme")):
         print("You are getting flagged")
         return True
     return False

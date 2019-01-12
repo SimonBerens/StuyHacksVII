@@ -4,16 +4,17 @@ socket.on("connect", () => {
     socket.emit("user connected", {});
 });
 socket.on("update table", (users) => {
+    console.log(users);
     // user['uid'], user['username']
-    var element = document.getElementByID("people");
-    for(var i = 0; i < user.length; i++){
-    element.innerHTML += user['username']
+    let element = document.getElementByID("people");
+    for(let i = 0; i < users.length; i++){
+    element.innerHTML += users['username']
   } 
 });
 
 $("#send").click(() => {
     socket.emit("user sent message", {
-        touid: "ASdfasd",
+        touid: "sberens",
         data: $("#message_box").val()
     });
 });
