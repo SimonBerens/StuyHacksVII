@@ -1,14 +1,33 @@
 {% extends "skeleton.html" %}
 {% block title %} Chatting {% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="custom/chat.css") }}">
+{% endblock %}
 {% block body %}
-    <div class="container">
-        <label for="message_box"> Thing </label>
-        <textarea id="message_box"></textarea>
-        <button type="button" class="btn btn-primary" id="send">Primary</button>
+    <div id="main" class="container">
+        <div id="main_row" class="row">
+            <div id="people" class="col-2">
+
+            </div>
+            <div id="chat" class="col-10">
+                <div id="info_top" class="row" >
+                    <div id="info_text" class="col">
+
+                    </div>
+                </div>
+                <div id="history" class="row">
+
+                </div>
+                <div id="send" class="form-group row align-items-end">
+                    <input class="form-control col-10" id="message_box">
+                    <button type="button" class="btn btn-primary col-1" id="submit">Send</button>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 {% block js %}
     <script src="{{ url_for("static", filename="lib/socket.io.js") }}"></script>
-    <script src="{{ url_for("static", filename="custom/socketio.js") }}"></script>
+    <script src="{{ url_for("static", filename="custom/chat.js") }}"></script>
 {% endblock %}
 

@@ -1,0 +1,45 @@
+body, html{
+    height: 100%;
+}
+
+#main {
+    padding: 2%;
+    height: 100%;
+}
+
+#main_row {
+    height: 100%;
+}
+
+#people {
+    border: 1px solid #868e96;
+    border-radius: 5px ;
+    height: 100%;
+    background-color: blue;
+}
+
+#chat {
+    position: relative;
+    height: 100%;
+    border: 1px solid #868e96;
+    border-radius: 5px;
+    left: 2%;
+}
+
+#info_top {
+    border-bottom: 1px solid #868e96;
+    text-align: center;
+}
+
+#history {
+    height: 86%;
+    background-color: red;
+}
+
+#send {
+    padding: 1.5%;
+}
+
+#submit {
+    margin-left: 2%;
+}

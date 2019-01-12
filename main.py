@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, session, redirect, url_for, f
 from flask_socketio import SocketIO
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+import sqlite3
 import requests
 import http.client, urllib.request, urllib.parse, urllib.error, base64
 import json
@@ -12,15 +13,28 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = urandom(64)
 socketio = SocketIO(app)
 
-
-def message_received(methods=["GET", "POST"]):
-    print("message was received!!!")
+DB_FILE = "cyber.db"
 
 
-@socketio.on("my event")
-def handle_my_custom_event(json, methods=["GET", "POST"]):
-    print("received my event: " + str(json))
-    socketio.emit("my response", json, callback=message_received)
+@socketio.on("user connected")
+def handle_user_connected(json, methods=["GET", "POST"]):
+    command = f"UPDATE profiles SET ActiveSession = {json['sid']} WHERE UserID == {json['uid']}"
+    db = sqlite3.connect(DB_FILE, check_same_thread=False)  # open if file exists, otherwise create
+    c = db.cursor()
+    c.execute(command)
+    db.commit()
+    db.close()
+
+
+
+@socketio.on("user sent message")
+def handle_user_sent_message(json, methods=["GET", "POST"]):
+    command = f"INSERT INTO messages ('FromUserID', 'ToUserID', 'Message', 'Flagged') VALUES ({json['fromuid']}, {json['touid']}, {json['data']}, {toFlag(json['data'])})"
+    db = sqlite3.connect(DB_FILE, check_same_thread=False)  # open if file exists, otherwise create
+    c = db.cursor()
+    c.execute(command)
+    db.commit()
+    db.close()
 
 def get_cyberbullied(content):
     '''Returns api dict based on user msg'''
@@ -56,7 +70,6 @@ def toFlag(content):
         return True
     return False
 
-toFlag("You are a fucking idiot")
 
 
 @app.route("/")
@@ -70,7 +83,7 @@ def chat():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-     if request.method == "GET":
+    if request.method == "GET":
         username = authenticate.is_loggedin(session)
         if username:
             flash("You are already logged in!", "warning")
@@ -79,26 +92,26 @@ def login():
             return render_template("login.html")
 
         success, message = authenticate.login_user(
-                request.form['username'],
-                request.form['password'])
+            request.form['username'],
+            request.form['password'])
         if success:
             flash(message, "success")
-            session['loggedin']=request.form['username']
+            session['loggedin'] = request.form['username']
             return redirect(url_for('chat', username=request.form['username']))
         else:
             flash(message, "danger")
             return redirect(url_for('login'))
 
 
-@app.route("/register",methods=["GET", "POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
         return render_template("register.html")
     else:
         success, message = authenticate.register_user(
-                request.form['username'],
-                request.form['password'],
-                request.form['passwordConfirmation'])
+            request.form['username'],
+            request.form['password'],
+            request.form['passwordConfirmation'])
         if success:
             flash(message, "success")
             return redirect(url_for('login'))
