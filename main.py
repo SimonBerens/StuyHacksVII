@@ -27,7 +27,7 @@ def handle_user_connected(json, methods=["GET", "POST"]):
 
 
 @socketio.on("disconnect")
-def handle_disconnect(json, methods=["GET", "POST"]):
+def handle_disconnect(methods=["GET", "POST"]):
     command = f"UPDATE profiles SET ActiveSession = '0' WHERE UserID == {session['uid']}"
     db = sqlite3.connect(DB_FILE, check_same_thread=False)  # open if file exists, otherwise create
     c = db.cursor()
@@ -39,7 +39,7 @@ def handle_disconnect(json, methods=["GET", "POST"]):
 
 @socketio.on("user sent message")
 def handle_user_sent_message(json, methods=["GET", "POST"]):
-    command = f"INSERT INTO messages ('FromUserID', 'ToUserID', 'Message', 'Flagged') VALUES ({session['uid']}, {json['touid']}, {json['data']}, {toFlag(json['data'])})"
+    command = f"INSERT INTO messages ('FromUserID', 'ToUserID', 'Message', 'Flagged') VALUES ({session['uid']}, {json['touid']}, '{json['data']}', {toFlag(json['data'])})"
     db = sqlite3.connect(DB_FILE, check_same_thread=False)  # open if file exists, otherwise create
     c = db.cursor()
     c.execute(command)
@@ -54,8 +54,8 @@ def handle_user_sent_message(json, methods=["GET", "POST"]):
     db.commit()
     for uid in c:
         uids.add(uid[0])
-    result_set = c.execute('SELECT uid, username, activesession FROM profiles WHERE userid IN (%s)' %
-                           ','.join('?'*len(uids)), uids)
+    result_set = c.execute("SELECT 'uid', 'username', 'activesession' FROM profiles WHERE userid IN (%s)" %
+                           ",".join("?"*len(uids)), uids)
     db.commit()
     client_users = []
     for u in result_set:
@@ -92,15 +92,15 @@ def get_cyberbullied(content):
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
 
-# get_cyberbullied("You are an idiot.")
-
-
 def toFlag(content):
     data = get_cyberbullied(content)
-    if (data['sentiment_expressions'][0]['polarity'] == 'negative' and (data['abuse'][0]['severity'] == "medium" or data['abuse'][0]['severity'] == "high" or data['abuse'][0]['severity'] == "extreme")):
-        print("You are getting flagged")
-        return True
-    return False
+    try:
+        if (data['sentiment_expressions'][0]['polarity'] == 'negative' and (data['abuse'][0]['severity'] == "medium" or data['abuse'][0]['severity'] == "high" or data['abuse'][0]['severity'] == "extreme")):
+            print("You are getting flagged")
+            return 1
+    except KeyError:
+        print("Not enough to do sentiment analysis")
+    return 0
 
 
 @app.route("/")

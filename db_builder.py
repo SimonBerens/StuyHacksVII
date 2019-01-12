@@ -41,7 +41,8 @@ messagesHeader = {
     "MessageID": "INTEGER PRIMARY KEY",
     "FromUserID": "INTEGER",
     "ToUserID": "INTEGER",
-    "Message": "TEXT"
+    "Message": "TEXT",
+    "Flagged": "INTEGER"
 }
 createTable("messages", messagesHeader, ("FromUserID", "profiles", "UserID"))
 

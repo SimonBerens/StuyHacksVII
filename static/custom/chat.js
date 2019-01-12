@@ -14,7 +14,7 @@ socket.on("update table", (users) => {
 
 $("#send").click(() => {
     socket.emit("user sent message", {
-        touid: "sberens",
+        touid: 1,
         data: $("#message_box").val()
     });
 });
