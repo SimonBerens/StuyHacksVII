@@ -1,0 +1,15 @@
+{% extends "skeleton.html" %}
+{% block title %} Register {% endblock %}
+
+{% block body %}
+<div class="signup-form container">
+	<form action="/register" method="POST">
+    <h2 class ="text-center">CREATE AN ACCOUNT!</h2>
+		<h4>Username:</h4> <input class = "form-control" type = "text" name = "username" required><br>
+		<h4>Password:</h4> <input class = "form-control" type = "password" name = "password" required><br>
+		<h4>Re-Enter Password:</h4> <input class = "form-control" type = "password" name = "passwordConfirmation" required> <br>
+		<button type ="submit" class="btn btn-success btn-lg btn-block"> Register Now</button>
+	</form>
+</div>
+	<div class="text-center">Already have an account? <a href="/login">Sign in</a></div>
+{% endblock %}
