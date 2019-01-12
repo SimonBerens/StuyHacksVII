@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="{{ url_for("static", filename="custom/chat.css") }}">
 {% endblock %}
 {% block body %}
+  <a href="/">Logout</a>
     <div id="main" class="container">
         <div id="main_row" class="row">
             <div id="people" class="col-2">
@@ -30,4 +31,3 @@
     <script src="{{ url_for("static", filename="lib/socket.io.js") }}"></script>
     <script src="{{ url_for("static", filename="custom/chat.js") }}"></script>
 {% endblock %}
-

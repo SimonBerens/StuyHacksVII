@@ -91,6 +91,8 @@ def login():
         else:
             return render_template("login.html")
 
+        print("IS IT A SUCCESS",success)
+    else:
         success, message = authenticate.login_user(
             request.form['username'],
             request.form['password'])
@@ -119,6 +121,15 @@ def register():
             flash(message, "danger")
             return redirect(url_for('register'))
 
+@app.route('/logout', methods=["GET", "POST"])
+def logout():
+    '''Handles logging out of user account'''
 
+    if authenticate.is_loggedin(session):
+        session.pop('loggedin')
+        flash("Successfully logged out.", "success")
+    else:
+        flash("You are not logged in!", "danger")
+    return redirect(url_for('login'))
 if __name__ == "__main__":
     socketio.run(app, debug=True)
