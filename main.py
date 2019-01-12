@@ -41,6 +41,23 @@ def handle_user_sent_message(json, methods=["GET", "POST"]):
     c = db.cursor()
     c.execute(command)
     db.commit()
+    uids = set()
+    command = f"SELECT touserid FROM messages WHERE fromuserid = {session['uid']}"
+    c.execute(command)
+    for uid in c:
+        uids.add(uid[0])
+    command = f"SELECT fromuserid FROM messages WHERE touserid = {session['uid']}"
+    c.execute(command)
+    db.commit()
+    for uid in c:
+        uids.add(uid[0])
+    result_set = c.execute('SELECT uid, username, activesession FROM profiles WHERE userid IN (%s)' %
+                           ','.join('?'*len(uids)), uids)
+    db.commit()
+    for user in result_set:
+        if user[2] != 0:
+            socketio.emit("update table", {"users": result_set}, room=user[2])
+
     db.close()
 
 
