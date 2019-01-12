@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+{#    Libraries #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/bootstrap.min.css') }}">
+    <script src="{{ url_for('static', filename='lib/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/bootstrap.min.js') }}"></script>
+</head>
+<body>
+
+<label for="message_box"> Thing </label>
+<textarea id="message_box">
+
+</textarea>
+<button type="button" class="btn btn-primary" id="send">Primary</button>
+
+<script>
+    const socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    $("#send").click(() => {
+        $.ajax("/process", {
+            data: $("#message_box").val(),
+            method: "POST",
+        })
+    })
+</script>
+
+</body>
+</html>
