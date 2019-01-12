@@ -7,15 +7,15 @@
 	<link rel="stylesheet" href="{{ url_for("static", filename="custom/index.css") }}">
 </head>
 <body>
-	<div class="card mx-auto" style="width: 18rem;">
-		<img class="card-img-top" src="http://www.stickpng.com/assets/thumbs/588a6ab8d06f6719692a2d26.png" alt="Card image cap">
-		<div class="card-body">
-			<h5 class="card-title">Welcome to EndCyberBully!</h5>
-			<p class="card-text">We use a a chat that utiizes AI to flag harmful messages and alert site owners.</p>
-			Have an account?  <a href="{{ url_for('login') }}">Login</a>
-			<br>
-			New to this site?  <a href="{{ url_for('register') }}">Register</a>
-		</div>
+	<div class='container text-center'>
+		<img src="http://www.stickpng.com/assets/thumbs/588a6ab8d06f6719692a2d26.png" alt="comp">
+		<br>
+		<br>
+		<h5>Welcome to EndCyberBully!</h5>
+		<p>We use a a chat that utiizes AI to flag harmful messages and alert site owners.</p>
+		Have an account?  <a href="{{ url_for('login') }}">Login</a>
+		<br>
+		New to this site?  <a href="{{ url_for('register') }}">Register</a>
 	</div>
 
 </body>
